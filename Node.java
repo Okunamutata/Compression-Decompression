@@ -1,4 +1,4 @@
-package List;
+
 
 public class Node {
 	private Object item;

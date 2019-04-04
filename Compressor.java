@@ -21,7 +21,7 @@ import java.util.*;
 
 public class Compressor{
 
-    string inputFileName;
+    String inputFileName;
     int stSize;
     int endSize; 
     int fullness; 
@@ -61,7 +61,7 @@ public class Compressor{
     * @parama values needed to construct the log file, values set by dictionary function
     * @return  string to be written to the log file
     */
-    public String logFile(string inputFileName, int stSize, int endSize, int fullness, double avLinkLeng,
+    public String logFile(String inputFileName, int stSize, int endSize, int fullness, double avLinkLeng,
                             int longList, int totEntries, int numReHash){
        
         String log = "Compression of " + inputFileName + "\n" +
@@ -121,7 +121,8 @@ public class Compressor{
         
     
         }
-         catch (FileNotFoundException e) {
+         catch (FileNotFoundException e)
+        {
             //if the provided file is not found or is invalid
             System.out.println("Please enter a valid file name");
             break;

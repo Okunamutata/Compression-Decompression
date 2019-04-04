@@ -1,18 +1,18 @@
 
 import java.util.ArrayList;
- 
-import List.Node;
+import java.util.Collection;
 
 public class Dictionary{
-    ArrayList<Node> table;
+    ArrayList<LinkedList> table;
     public int ts; //table size
     
     public Dictionary(int size){ // does Int works?
        
-        table = new ArrayList<Node>(nextPrime(size));
+        table = new ArrayList<LinkedList>(nextPrime(size));
         
-        for(int i = 0; i < table.length; i++){
-            table.add(new LinkedList<Node>());
+        for(int i = 0; i < table.size(); i++)
+        {
+            table.add( new LinkedList());
 
            
         }
@@ -62,21 +62,25 @@ public class Dictionary{
 
 
     public void makeEmpty(){
-        for(int i = 0; i < table.length; i++){
+        for(int i = 0; i < table.size(); i++){
             table.remove(i);
 
              //why save table size?
              ts = 0;
         }
     }
-    public int hashCode(int asciiVal, int ts){
+    public int hashCode(int asciiVal, int ts)
+    {
         int index;
-        index = (int) (asciiVal * 31) % ts;
+        index =  (asciiVal * 31) % ts;
         return index;
     }
 
-    public void insert(int index ){
-        short tableHead;
+    public void insert(String value )
+    {
+    	int tablePosition = hashCode(value);
+    	
+        int tableHead;
         Node newNode = new Node((ascii) index);
         tableHead = dictionary[index];
         if(table.head.getNext() == null){
