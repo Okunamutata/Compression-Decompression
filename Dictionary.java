@@ -1,26 +1,25 @@
 
-import java.util.ArrayList;
- 
+
+import java.util.Collection;
+
+
 import List.Node;
-
 public class Dictionary{
-    ArrayList<Node> table;
     public int ts; //table size
-    
+    LinkedList[]table;
+
+
     public Dictionary(int size){ // does Int works?
-       
-        table = new ArrayList<Node>(nextPrime(size));
+        Node head = new Node();
+        table = new LinkedList[nextPrime(size)];
         
-        for(int i = 0; i < table.length; i++){
-            table.add(new LinkedList<Node>());
-
-           
+        for(int i = 0; i < table.length; i++)
+        {
+            table[i].add(head);
         }
-       
-
-        
     }
 
+    
 
     public static int nextPrime(int n){
         if (n % 2 == 0)
@@ -48,35 +47,62 @@ public class Dictionary{
        
     }
 
-    public void rehash(){
+    public Dictionary Rehash(int size, Dictionary oldTable){
+        
+        Dictonary temp = new Dictionary[nextPrime(size)];
+        int ts = temp.length;
+        int oldLength = oldTable.length;
+        for(int i = 0; i < oldTable.length; i++){
+            int listLength = table[i].listLength();
+            if(table[i].head.getNext() != null){
 
+                for(int j = 0; j < listLength; j++){
+                    Node entryTemp = table[j].head.getNext();
+                    int hash = hashCode(entryTemp.getString(), nextPrime(size) );
+                    for(int x = 0; x < temp.length; x++){
+                        if(temp[x].head.getNext() == null){
+                            temp[x].head.setNext(entryTemp);
+                        }
+                        else{
+                            if(temp[x].getNext != null){ temp[x].setNext(entryTemp);}
+                            
+                        }
+                    }
+                    
+                }
+            }
+        }
+        return temp;
     }
     
-    public void intzDic(){
-        for(int i = 32; i < 126; i++){
-            int hash = hashCode(i, 191);
-            //complete initializeing dicitionary wth ascii 
-
-        }
-    }
 
 
     public void makeEmpty(){
         for(int i = 0; i < table.length; i++){
-            table.remove(i);
+            table[i].remove();
 
              //why save table size?
              ts = 0;
         }
     }
-    public int hashCode(int asciiVal, int ts){
+    public int hashCode(String str, int ts)
+    {
         int index;
-        index = (int) (asciiVal * 31) % ts;
+        int asciiVal = (int) str;
+        for(int i = 0; i < str.length(); i++){
+            char c = str.charAt(i);
+            index += (int) c * 17;
+        }
+        
+        index =  (index * 31) % ts;
         return index;
     }
 
-    public void insert(int index ){
-        short tableHead;
+    public void insert(String str, int ts)
+    {
+    	int tablePosition = hashCode(str, ts);
+    	
+        int tableHead;
         Node newNode = new Node((ascii) index);
         tableHead = dictionary[index];
         if(table.head.getNext() == null){

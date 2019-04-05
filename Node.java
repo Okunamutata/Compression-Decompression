@@ -1,4 +1,4 @@
-package List;
+
 
 public class Node {
 	private Object item;
@@ -6,9 +6,10 @@ public class Node {
 	
 	
 	//Default constructor or a node
-	public Node(Object newItem)
+	public Node(String str)
 	{
-		item = newItem;
+		String strVal = str;
+		int asciiVal = (int) str;
 		next = null;
 	}
 	
@@ -18,12 +19,18 @@ public class Node {
 		item = newItem; 
 		next = newNode;
 	}
+
+	public Node getNode(){ return this;}
+
 	
-	public Object getItem()
+	public int getAsVal()
 	{
-		return item;
+		return asciiVal;
 	}
 	
+	public String getString(){
+		return strVal;
+	}
 	
 	public Node getNext()
 	{

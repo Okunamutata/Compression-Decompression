@@ -49,13 +49,68 @@ public class Compressor{
         int numReHash = 0;
     }
 
-
-
-    public void dictionary( int tsNum){
-        
-       
-
+    public static boolean checkSize(Dictionary table){
+        int numItems = table.Size();
+        if((numItems/(table.Length())) >= 0.9){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
+
+
+
+    public static ArrayList<Integer> reader(String filename, Dictionary table){
+        ArrayList<Integer> compressed = new ArrayList<Integer>();
+        File file = new File(filename);
+        BufferedReader br = null;
+        String st, str;
+        int code;
+        
+
+        try {
+            br = new BufferedReader(new FileReader(file));
+            while((st = br.readLine()) != null){
+                for(int i = 0; i < st.length(); i++){
+                    str = st.charAt(i);
+                    table.insert(str, table.length);
+                }
+            }
+
+            if(chechSize(table)){
+                table = table.Rehash(nextPrime(table.length));
+            }
+
+            for(int i = 0; i < table.length; i++){
+                compressed.add(i);
+            }
+
+            br.close();
+        } catch (FileNotFoundException e) {
+           
+            System.out.println("Please enter a valid file name");
+        }
+
+        return compressed;
+    }
+
+
+    public static void writer(String filename, ArrayList<integer> data){
+        try{
+            DataOutputStream out = new DataOutputStream(new FileOutputStream(filename+".zzz"));
+            for(int i: data){
+                out.writeInt(IntegertoBinary(i));
+            }
+            out.close();
+        }
+        catch(IOException e){
+            
+        }
+    }
+    
+
+
 
     /*
     * @parama values needed to construct the log file, values set by dictionary function
@@ -82,11 +137,12 @@ public class Compressor{
 
 
     public static void main(String[] args){
-        Compressor comp = new Compressor();
         Scanner input = new Scanner(System.in);
         String file;
-        boolean valid = true;
-        FileWriter toFile;
+        boolean reRun = true;
+        ArrayList<Integer> compressed = new ArrayList<Integer>();
+       
+
 
         do {
             
@@ -95,9 +151,7 @@ public class Compressor{
 
         /*
         *Take in txt file from command line
-        *
         * Prompt user to enter txt file, if args[0] is empty
-        *
         * Try to take in the the 
         */
         try{
@@ -108,6 +162,21 @@ public class Compressor{
                 file = input.next();
             }
 
+            Dictionary table = new Dictionaty(1373);
+            char[] carr = new char[95]; // 95 = 126-32+1
+            for(char ch = 32; ch <= 126; ++ch){
+                carr[ch-32] = ch;
+                table.insert((String) carr, 1373);
+            }
+            reader(file, table);
+            compressed = reader(file, table);
+            
+            System.out.println("Please enter the name of your new compressed file: ");
+            String fileout = input.next();
+            
+            writer(fileout, compressed);
+            
+        
 
             
         /* 
