@@ -1,24 +1,21 @@
 
-import java.util.ArrayList;
- 
-import List.Node;
 
+import java.util.Collection;
+import java.util.LinkedList;
+
+import List.Node;
 public class Dictionary{
-    ArrayList<Node> table;
     public int ts; //table size
     
     public Dictionary(int size){ // does Int works?
-       
-        table = new ArrayList<Node>(nextPrime(size));
+       Node head = new Node();
+        LinkedList<Node> []table = new LinkedList<Node>[nextPrime(size)];
         
-        for(int i = 0; i < table.length; i++){
-            table.add(new LinkedList<Node>());
-
-           
+        for(int i = 0; i < table.length; i++)
+        {
+            table[i] = ( new LinkedList());
+            table[i].add(head);
         }
-       
-
-        
     }
 
 
@@ -48,35 +45,62 @@ public class Dictionary{
        
     }
 
-    public void rehash(){
+    public Dictionary Rehash(int size){
+        //Dictionary newDic = new Dictionary(nextPrime(size));
+        Dictonary temp = new Dictionary[nextPrime(size)];
+        int ts = temp.length;
+        int index = 0;
+        for(int i = 0; i < table.length; i++){
+            int listLength = table[i].size();
+            if(table[i].peek() != null){
 
+                for(int j = 0; j < listLength; j++){
+                    Node entryTemp = table[j].peek();
+                    int hash = hashCode(entryTemp.getString(), ts );
+                    for(int x = 0; x < temp.length; x++){
+                        if(temp[x].peek() == null){
+                            temp[x] = new LinkedList<Node>();
+                            temp[x].add(entryTemp);
+                        }
+                        else{
+                            temp[x].add(entryTemp);
+                        }
+                    }
+                    
+                }
+            }
+        }
+        return temp;
     }
     
-    public void intzDic(){
-        for(int i = 32; i < 126; i++){
-            int hash = hashCode(i, 191);
-            //complete initializeing dicitionary wth ascii 
-
-        }
-    }
 
 
     public void makeEmpty(){
         for(int i = 0; i < table.length; i++){
-            table.remove(i);
+            table[i].remove();
 
              //why save table size?
              ts = 0;
         }
     }
-    public int hashCode(int asciiVal, int ts){
+    public int hashCode(String str, int ts)
+    {
         int index;
-        index = (int) (asciiVal * 31) % ts;
+        int asciiVal = (int) str;
+        for(int i = 0; i < str.length(); i++){
+            char c = str.charAt(i);
+            index += (int) c * 17;
+        }
+        
+        index =  (index * 31) % ts;
         return index;
     }
 
-    public void insert(int index ){
-        short tableHead;
+    public void insert(String str, int ts)
+    {
+    	int tablePosition = hashCode(str, ts);
+    	
+        int tableHead;
         Node newNode = new Node((ascii) index);
         tableHead = dictionary[index];
         if(table.head.getNext() == null){
