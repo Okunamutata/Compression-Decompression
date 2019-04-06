@@ -1,26 +1,55 @@
 
-import java.util.ArrayList;
- 
-import List.Node;
+
+import java.util.Collection;
+
+
 
 public class Dictionary{
-    ArrayList<Node> table;
-    public int ts; //table size
     
-    public Dictionary(int size){ // does Int works?
-       
-        table = new ArrayList<Node>(nextPrime(size));
+    LinkedList[] theArray;
+    Node head;
+    int arraySize;
+    int itemsInArray;
+
+    /*
+    * Constructor for Dixtionary object
+    * @param int size, the size of the hashTable
+    */ 
+    public Dictionary(int size){
+        arraySize = nextPrime(size);
+        head = null;
+        theArray = new LinkedList[arraySize];
         
-        for(int i = 0; i < table.length; i++){
-            table.add(new LinkedList<Node>());
-
-           
+        
+        for(int i = 0; i < arraySize; i++)
+        {
+            theArray[i] = new LinkedList();
         }
-       
-
         
     }
 
+
+    public void insert(char str)
+    {
+        
+        Node newNode = new Node(str);
+
+        //calculate hashkey
+    	Integer hashKey  = hashFunc(str);
+        
+        //theArray[hashKey].endInsert(newNode); 
+        if(theArray[hashKey] == null){
+            theArray[hashKey] = new LinkedList();
+            theArray[hashKey].endInsert(newNode);
+
+        }
+        else{
+            theArray[hashKey].endInsert(newNode);
+            
+        }
+    }
+    
+    
 
     public static int nextPrime(int n){
         if (n % 2 == 0)
@@ -48,52 +77,116 @@ public class Dictionary{
        
     }
 
-    public void rehash(){
-
-    }
-    
-    public void intzDic(){
-        for(int i = 32; i < 126; i++){
-            int hash = hashCode(i, 191);
-            //complete initializeing dicitionary wth ascii 
-
-        }
-    }
-
-
-    public void makeEmpty(){
-        for(int i = 0; i < table.length; i++){
-            table.remove(i);
-
-             //why save table size?
-             ts = 0;
-        }
-    }
-    public int hashCode(int asciiVal, int ts){
-        int index;
-        index = (int) (asciiVal * 31) % ts;
-        return index;
+    //Methos to test hashtable and rehash
+    private void displayArray(){
+        Node curr;
+        int listLength;
+        LinkedList list;
+        for(int i  = 0; i < this.arraySize-1; i++){
+            System.out.println("the Array index " + i);
+            list = theArray[i];
+            //listLength = theArray[i].listLength();
+            
+        }    
     }
 
-    public void insert(int index ){
-        short tableHead;
-        Node newNode = new Node((ascii) index);
-        tableHead = dictionary[index];
-        if(table.head.getNext() == null){
-            head.setNext(newNode());
-        }
-        else{
-            Node curr = head;
-                if(curr.getNext() == null){
-                    curr.setNext(newNode()); 
+    public Dictionary Rehash(int size){
+        int oldArrSize = this.arraySize;
+        int newArrSize = nextPrime(oldArrSize * 2);
+        Dictionary newTable = new Dictionary(newArrSize);
+        
+       
+        //loop through each index in the dictionary array
+        for(int i = 0; i < oldArrSize; i++){
+            LinkedList tempList = theArray[i];
+            int listLength = tempList.listLength();
+            Node headTemp = tempList.head;
+            Node curr;
+
+            //check if the current list is empty
+            //if !empty copy and increment through the list
+            if(tempList != null){
+                curr = headTemp;
+                if(headTemp.getNext() != null){
+                    curr = headTemp.getNext();
                 }
+                else{
+                    curr = headTemp;
+                }
+                //loop through the list in old hash table
+                for(int j = 0; j < listLength; j++){
+                    
+                    Node entryTemp = curr;
+                    int newKeyVal = hashFunc2(entryTemp.getChar(), newArrSize );
+                    
+                    //if the location on the new table is empty create a new linked list and add the copy the node
+                    if(newTable.theArray[newKeyVal] == null){
+                        //Node temp = newTable.theArray[newKeyVal].head;
+                        //temp.endInsert(entryTemp);
+
+                        newTable.theArray[newKeyVal].endInsert(entryTemp);
+                       
+            
+                    }
+                    else{
+                        newTable.theArray[newKeyVal].endInsert(entryTemp);
+                        
+                    }
+                }    
+            }
             
         }
+        return newTable;
+    }
+    
+
+
+    
+
+    /*
+    * Creates key value for hash table insertion
+    * @parama String str, the ctring to be encoded
+    */
+    public int hashFunc(char str)
+    {
+        int hashKeyVal = 0,asciiVal;
+        int tableSize = this.arraySize;
+        
+            asciiVal = (int) str;
+            hashKeyVal = (asciiVal) * 17 % tableSize;
+        
+       
+        //
+        
+        
+        
+        return hashKeyVal;
+    }
+
+    public int hashFunc2(char str, int newArrSz)
+    {
+        int hashKeyVal =0 , asciiVal;
+        int tableSize = newArrSz;
+       
+            asciiVal = (int) str;
+            hashKeyVal = (asciiVal) * 17 % tableSize;
+        
+        
+        
+        
+        return hashKeyVal;
     }
 
 
 
     public static void main(String[] args){
-       
+       char test = 'b';
+       Dictionary hashtable = new Dictionary(50);
+       hashtable.insert(test);
+       hashtable.displayArray();
+
+       Dictionary newdic =hashtable.Rehash(50);
+       newdic.displayArray();
+
     }
 }

@@ -1,29 +1,40 @@
-package List;
+
 
 public class Node {
-	private Object item;
+	private char str, strVal;
 	private Node next;
+	int asciiVal;
+	int hashKey;
 	
 	
 	//Default constructor or a node
-	public Node(Object newItem)
+	public Node(char str)
 	{
-		item = newItem;
+		 char strVal = str;
+		asciiVal = (int) str;
 		next = null;
 	}
 	
 	//constructor for item and node
-	public Node(Object newItem, Node newNode)
+	public Node(char str, int hk)
 	{
-		item = newItem; 
-		next = newNode;
+		hashKey = hk;
+		char strVal = str;
+		asciiVal = (int) str;
+		next = null;
+	}
+
+	public Node getNode(){ return this;}
+
+	
+	public int getAsVal()
+	{
+		return asciiVal;
 	}
 	
-	public Object getItem()
-	{
-		return item;
+	public char getChar(){
+		return this.strVal;
 	}
-	
 	
 	public Node getNext()
 	{
