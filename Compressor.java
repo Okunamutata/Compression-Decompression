@@ -1,139 +1,94 @@
-/*
-* Project 1, Comp 285
-* @author Tobenna Okunna
-* 2/26/19
-* This Project constructs 4 algorithms, 
-* each made to find the max within a sequence of numbers. 
-* The program also gives the user the runtime of each operation in milliseconds. 
-*/
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Scanner;
-
-import List.ListReferenceBased;
-
+import java.io.*;
+import java.lang.*;
 import java.util.*;
-
 public class Compressor{
-
-    string inputFileName;
-    int stSize;
-    int endSize; 
-    int fullness; 
-    double avLinkLeng;
-    int longList; 
-    int totEntries; 
-    int numReHash;
-
-
-
-
-
-
-    /*
-    * Default constructor for Compressor
-    * it will initilize the global valuse for ease of use to wrtie the log file
-    */
-    public Compressor(){
-        int stSize = 0;
-        int endSize = 0; 
-        int fullness = 0; 
-        double avLinkLeng = 0.0;
-        int longList = 0; 
-        int totEntries = 0; 
-        int numReHash = 0;
-    }
-
-
-
-    public void dictionary( int tsNum){
-        
-       
-
-    }
-
-    /*
-    * @parama values needed to construct the log file, values set by dictionary function
-    * @return  string to be written to the log file
-    */
-    public String logFile(string inputFileName, int stSize, int endSize, int fullness, double avLinkLeng,
-                            int longList, int totEntries, int numReHash){
-       
-        String log = "Compression of " + inputFileName + "\n" +
-                        "Compressed from " +  stSize + endSize + "\n" +
-                        "Hash table is " + fullness + " % full" + "\n" +
-                        "The average linked list is " + avLinkLeng + " elements long" + "\n" +
-                        "The longest linked list contains " + longList + " total elements" + "\n" + 
-                        "The dictionary contains " + totEntries + " total entries" + "\n" + 
-                        "The table was rehased " + numReHash + " times";
-                    
-                    
-        return log;
-        }
-                            
-        
-
-
-
-
     public static void main(String[] args){
-        Compressor comp = new Compressor();
         Scanner input = new Scanner(System.in);
-        String file;
-        boolean valid = true;
-        FileWriter toFile;
+        boolean repeat = true;
+        File file;
+        String inputfile, outputfile, runAgian;
+        ArrayList<Integer> compressed = new ArrayList<Integer>();
 
-        do {
+        try {
+            file = new File(args[0]);
             
-        
-       
-
-        /*
-        *Take in txt file from command line
-        *
-        * Prompt user to enter txt file, if args[0] is empty
-        *
-        * Try to take in the the 
-        */
-        try{
-            if(args[0] != null){ 
-                file = args[0]; 
-            }else{
-                System.out.println("Please enter the file you wish to compress");
-                file = input.next();
-            }
-
-
+        } catch (FileNotFoundException e) {
+            //TODO: handle exception
+            System.out.println("Please enter a valid file");
+            System.out.println("Please enter the file you wish to compress");
+                inputfile = input.nextLine();
+                file = new File(inputfile);
             
-        /* 
-        * create the log file
-        * call log  
-        * call toFile
-        * tofile.write(comp.log(with args from values of))
-        */   
+        }
+        while(repeat == true){
+        //Initalize Dictionary
+        Dictionary dt = new Dictionary();
+        dt.intzDic();
 
 
-        
     
+
+       
+            BufferedReader br = null;
+            String  line, temp1, q, p;
+            int code = 0;
+            Integer text;
+
+        try {
+                br = new BufferedReader(new FileReader(file));
+                int i = 0;
+                while((line = br.readLine()) != null){
+                
+                    
+                        p =  Character.toString(line.charAt(i));
+                        
+                        
+                        q = (Character.toString(line.charAt(i+1)) + p);
+                        code = dt.hashFunc(q);
+                        if(dt.theArray[code] == null ){
+                            dt.insert(q);
+                            compressed.add(code);
+                            i++;
+                        }else {//((dt.theArray[code] != null) && (dt.theArray[code].ListContains(q) == false)) {
+                            dt.theArray[code].ListInsertEnd(q, code);
+                            compressed.add(code);
+                            i++;
+                            q = "";
+                        }
+                }
+                br.close();
         }
-         catch (FileNotFoundException e) {
-            //if the provided file is not found or is invalid
-            System.out.println("Please enter a valid file name");
-            break;
+        catch (IndexOutOfBoundsException e) {
+                //TODO: handle exception
+                System.out.println("Fix it");
+        }    
+            
+            //Prompt users for outputfile
+            System.out.println("Please enter the file you wish to write to: ");
+            outputfile = input.nextLine();
+            fileWriter(outputfile, compressed);
+            
+            System.out.println("Do you wish to run again!?  \n Enter 'Y' to run again \n Enter 'N' for no");
+            runAgian = input.nextLine(); 
+            if(runAgian.equalsIgnoreCase("N")){
+                repeat = false;
+                break;
+            }
         }
-        
-    } while (valid == true);
-
-        
-
-
+        System.exit(0);
 
     }
 
-
+    public static void fileWriter(String filename, ArrayList<Integer> data){
+        try{
+            DataOutputStream out = new DataOutputStream(new FileOutputStream(filename+".zzz"));
+            for(int i: data){
+                out.writeInt(i);
+            }
+            out.close();
+        }
+        catch(IOException e){
+            
+        }
+    }
 }
