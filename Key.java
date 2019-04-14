@@ -1,29 +1,22 @@
-public class Node {
+public class Key {
 	
 	private String str;
 	private int code;
-	private Node next;
+	
 	//Default constructor or a node
-	public Node(String newStr, int newCode)
+	public Key(String newStr, int newCode)
 	{
 		str = newStr;
 		code = newCode;
-		next = null;
+		
 	}
-	//constructor for item and node
-	public Node(String newStr, int newCode, Node newNode)
-	{
-		 str = newStr;
-		code = newCode;
-		next = newNode;
-	}
-	public Node()
+	public Key()
 	{
 		str = null;
 		code = 0;
-		next = null;
+		
 	}
-	public Node getNode()
+	public Key getNode()
 	{ 
 		return this;
 	}
@@ -35,14 +28,7 @@ public class Node {
 	{
 		return this.str;
 	}
-	public Node getNext()
-	{
-		return next;
-	}
-	public void setNext(Node newNode)
-	{
-		next = newNode;
-	}
+	
 	public void setString(String newStr) 
 	{
 		str = newStr;
