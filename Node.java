@@ -1,39 +1,62 @@
-package List;
-
 public class Node {
-	private Object item;
+	
+	private String str;
+	private int code;
 	private Node next;
-	
-	
 	//Default constructor or a node
-	public Node(Object newItem)
+	public Node(String newStr, int newCode)
 	{
-		item = newItem;
+		str = newStr;
+		code = newCode;
 		next = null;
 	}
-	
 	//constructor for item and node
-	public Node(Object newItem, Node newNode)
+	public Node(String newStr, int newCode, Node newNode)
 	{
-		item = newItem; 
+		 str = newStr;
+		code = newCode;
 		next = newNode;
 	}
-	
-	public Object getItem()
+	public Node()
 	{
-		return item;
+		str = null;
+		code = 0;
+		next = null;
 	}
-	
-	
+	public Node getNode()
+	{ 
+		return this;
+	}
+	public int getCode()
+	{
+		return this.code;
+	}
+	public String getString()
+	{
+		return this.str;
+	}
 	public Node getNext()
 	{
 		return next;
 	}
-	
-	
 	public void setNext(Node newNode)
 	{
 		next = newNode;
 	}
-	
+	public void setString(String newStr) 
+	{
+		str = newStr;
+	}
+	public void setCode(int newCode) {
+		code = newCode;
+	}
+	public void setBoth(String newStr, int newKey) 
+	{
+		str = newStr;
+		code= newKey;
+	}
+	public char charAt(int posi)
+	{
+		return str.charAt(posi);
+	}
 }
