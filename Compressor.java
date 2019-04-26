@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.io.PrintWriter;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 /*
 *	The Class creates a LinkedList structure
 *   @author Tobenna Okunna, Faisal Binateeq
@@ -18,6 +20,7 @@ import java.io.PrintWriter;
 import java.nio.file.*;
 public class Compressor{
     
+    //fields needed to construct the hashTable
     LinkedList[] dictionary;
     int itemsInArray = 0;
     int code = 32; // current code of the dictionary    example:  aa --> 128 
@@ -34,9 +37,12 @@ public class Compressor{
          {
              dictionary[i] = new LinkedList();
          }
+         //initalize the dictionary
     	 intzDic();
         
     }
+
+    //initalize the hash table  with ascii value in our predicted range 
     public void intzDic()
     {
     	char codeC;
@@ -49,7 +55,7 @@ public class Compressor{
         	insert(str);
         }
         
-        
+        //include character that format the text as well
         insert("\b");
         insert("\t");
         insert("\n");
@@ -57,6 +63,11 @@ public class Compressor{
         insert("\r");
 
     }
+
+    /*
+    * method to insert into the hash table
+    * @param String str, the string to be compressed
+    */
     public void insert(String str)
     {
     
@@ -75,6 +86,11 @@ public class Compressor{
     
         
     }
+
+    /*
+    * method to insert to the new array 
+    * @parama tring str, int c, the string to be inserted and its corresponding code 
+    */
     public void insert(String str,int c) // inserts to the new array 
     {
          
@@ -92,12 +108,22 @@ public class Compressor{
         
         
     }
+
+    /*
+    * returns the average list length
+    *  calulated by dividing the number of items in the array by the length of the hash table 
+    */
     public int averageLinkedList()
     {
     	int average;
     	average = itemsInArray / dictionary.length;
     	return average;
     }
+
+    /* 
+    * method to rehash the dictinoary
+    * it will create a new larger table and copy the last table's entries using a new hash function
+    */
     public void rehash()
     {
     	String str;
@@ -132,6 +158,10 @@ public class Compressor{
         ++rehashCount;
         
     }
+    /*
+    * method to obtain the index needed on the table
+    * @param String str, the string to be compressed
+    */
     public int hashFunc(String str)
     {
         int hashVal = 0;
@@ -176,6 +206,12 @@ public class Compressor{
 	   return dictionary[hashFunc(str)].listContains(str);
 	
    }
+
+   /*
+   * method to compress and write to compressed c=output to a new file
+   * @param String str, the string to be encoded
+   * @param String outputFile, the name of the txt file 1st inputed
+   */
    public void compress(String str , String outputFile) throws IOException
 
    {
@@ -263,7 +299,11 @@ public class Compressor{
               if(f.exists())
               {
               br = new BufferedReader(new FileReader(fileName));
-              String fileInput = br.readLine();
+                
+              while ((fileInput = br.readLine()) != null) {  
+                fileInput += br.readLine();
+                // process the line
+             }
               
               startTime = System.nanoTime();
               cp.compress(fileInput, fileName);
